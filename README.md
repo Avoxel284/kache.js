@@ -15,7 +15,7 @@ kache.s("urlOfTheSongLyrics/API/songName", lyrics);
 
 
 let lyrics = kache.r("urlOfTheSongLyrics/API/whatever") || functionThatRequestsAnAPIAndGetsSongLyrics();
-// Boom! You have your lyrics fresh from the kache instead of ringing up your local ratelimited lyric API.
+// Boom! You have your lyrics fresh from the kache instead of ringing up your local ratelimited lyric API. And if you don't (retrieve function will just return null), well I guess you'll have to make that call.
 ```
 
 ## External kache file
