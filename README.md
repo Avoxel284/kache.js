@@ -22,8 +22,9 @@ let lyrics = kache.r("urlOfTheSongLyrics/API/whatever");
 Create a directory for the JSON file to go and specify in index.js under `_kachePath`.
 Note that the file will be read-only!
 
-
-
-
-
-i'm now realising this is a glorified object
+<br>
+<br>
+<br>
+<br>
+<br>
+i'm now realising this is a glorified object.. but oh well
