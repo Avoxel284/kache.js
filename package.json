@@ -1,0 +1,22 @@
+{
+  "name": "kache.js",
+  "version": "0.1.0",
+  "description": "A really simple module used to cache items for code optimization",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Avoxel284/kache.git"
+  },
+  "keywords": [
+    "caching"
+  ],
+  "author": "Oliver B",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Avoxel284/kache/issues"
+  },
+  "homepage": "https://github.com/Avoxel284/kache#readme"
+}
