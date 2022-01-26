@@ -15,7 +15,7 @@ if (_doubleOnExternal)
 	});
 
 /**
- * Exposed cache
+ * Direct access to the exposed cache
  */
 exports.cache = {};
 
@@ -62,6 +62,25 @@ exports.retrieve = (k) => {
 	return exports.cache[k];
 };
 
+/**
+ * A function that basically just makes your code shorter and life easier.
+ *
+ * @param {Function} retrieverFunc The retriever function that returns a value. Can be async or not, I'll wait.
+ * @param {String} key Key to store the retrieved stuff under
+ */
+exports.allInOne = async (retrieverFunc, key) => {
+	if (exports.cache[key]) return exports.cache[key];
+	try {
+		let value = await retrieverFunc;
+		exports.cache[key] = value;
+		return value;
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
+};
+
 // Shorthands
 exports.s = exports.store;
 exports.r = exports.retrieve;
+exports.a = exports.allInOne();
