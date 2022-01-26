@@ -5,12 +5,12 @@ const fs = require("fs");
 
 const _debug = false; // Toggle debug
 const _doubleOnExternal = true; // Create an external JSON file with the exposed cache?
-const _kachepath = ".kache/kache.json"; // If so, where to store this file?
+const _kachePath = ".kache/kache.json"; // If so, where to store this file?
 
 /* ------------------------------------------------------------------------------------------------------------ */
 
 if (_doubleOnExternal)
-	fs.writeFile(_kachepath, "{}", (e) => {
+	fs.writeFile(_kachePath, "{}", (e) => {
 		if (e) console.log(e);
 	});
 
@@ -25,7 +25,7 @@ exports.cache = {};
 exports.stats = () => {
 	return {
 		/** Kache external JSON file size in bytes */
-		KACHE_FILE_SIZE: _doubleOnExternal ? fs.stat(_kachepath).size : 0,
+		KACHE_FILE_SIZE: _doubleOnExternal ? fs.stat(_kachePath).size : 0,
 		/** Amount of items stored */
 		KACHE_ITEMS_STORED: Object.keys(exports.cache).length,
 	};
@@ -42,7 +42,7 @@ exports.store = (k, v) => {
 	exports.cache[k] = v;
 
 	if (_doubleOnExternal)
-		fs.writeFile(_kachepath, JSON.stringify(exports.cache), (e) => {
+		fs.writeFile(_kachePath, JSON.stringify(exports.cache), (e) => {
 			if (e) console.log(e);
 		});
 };
