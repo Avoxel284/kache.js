@@ -13,6 +13,8 @@ I won't be putting this on NPM for obvious reasons, however it is still really e
 Example
 
 ```JS
+const kache = require("kache.js")
+
 let lyrics = functionThatRequestsAnAPIAndGetsSongLyrics()
 kache.s("urlOfTheSongLyrics/API/songName", lyrics);
 // The lyrics are stored in the kache for later use.. pretty simple really
