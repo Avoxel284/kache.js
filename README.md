@@ -4,11 +4,17 @@ A really simple and lightweight module used to cache items for code optimization
 
 (And yes, I know Redis and other similar modules exist out there but I wanted something really simple with a cool name)
 
+## Installation
+I won't be putting this on NPM for obvious reasons, however it is still really easy to install since NPM allows installation of GitHub repos.
+`npm i https://github.com/Avoxel284/kache.js`
+
 ## Usage
 
 Example
 
 ```JS
+const kache = require("kache.js")
+
 let lyrics = functionThatRequestsAnAPIAndGetsSongLyrics()
 kache.s("urlOfTheSongLyrics/API/songName", lyrics);
 // The lyrics are stored in the kache for later use.. pretty simple really
