@@ -6,7 +6,7 @@ require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 
-const _debug = true;
+const _debug = false;
 let _kacheFilePath = process.env["KACHE_PATH"];
 
 if (_kacheFilePath != null) {
