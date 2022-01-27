@@ -1,18 +1,21 @@
 // kache.js - Avoxel284
 // A really simple module used to cache items for code optimization
 
+require("dotenv").config();
+
 const fs = require("fs");
+const path = require("path");
 
-const _debug = false; // Toggle debug
-const _doubleOnExternal = true; // Create an external JSON file with the exposed cache?
-const _kachePath = ".kache/kache.json"; // If so, where to store this file?
+const _debug = true;
+let _kacheFilePath = process.env["KACHE_PATH"];
 
-/* ------------------------------------------------------------------------------------------------------------ */
-
-if (_doubleOnExternal)
-	fs.writeFile(_kachePath, "{}", (e) => {
-		if (e) console.log(e);
-	});
+if (_kacheFilePath != null) {
+	_kacheFilePath = path.join(process.cwd(), _kacheFilePath);
+	if (_debug) console.log(`Creating kache directory: ${_kacheFilePath}`);
+	fs.mkdir(_kacheFilePath, { recursive: true }, () => {});
+	_kacheFilePath = path.join(_kacheFilePath, "kache.json");
+	fs.writeFileSync(_kacheFilePath, "{}");
+}
 
 /**
  * Direct access to the exposed cache
@@ -25,54 +28,59 @@ exports.cache = {};
 exports.stats = () => {
 	return {
 		/** Kache external JSON file size in bytes */
-		KACHE_FILE_SIZE: _doubleOnExternal ? fs.stat(_kachePath).size : 0,
+		FILE_SIZE: _kacheFilePath ? fs.statSync(_kacheFilePath).size : 0,
 		/** Amount of items stored */
-		KACHE_ITEMS_STORED: Object.keys(exports.cache).length,
+		ITEMS_STORED: Object.keys(exports.cache).length,
 	};
 };
 
 /**
  * Stores an item in the cache
  *
- * @param k Key to index the cache
- * @param v Value to enter in cache
+ * @param {String} key Key to index the cache
+ * @param {any} value Value to enter in cache
  */
-exports.store = (k, v) => {
-	if (!exports.cache[k] && _debug) console.log("kache.js // Overwriting value");
-	exports.cache[k] = v;
-
-	if (_doubleOnExternal)
-		fs.writeFile(_kachePath, JSON.stringify(exports.cache), (e) => {
-			if (e) console.log(e);
-		});
+exports.store = (key, value) => {
+	key = key.toString();
+	if (!exports.cache[key] && _debug) console.log("kache.js // Overwriting value");
+	exports.cache[key] = value;
+	if (_kacheFilePath) fs.writeFileSync(_kacheFilePath, JSON.stringify(exports.cache));
+	return value;
 };
 
 /**
  * Retrieves an item from the cache
  *
- * @param k Key to index the cache
- * @returns Value found
  * @example
  * ```
  * let foo = kache.r(bar) || getfoo(bar)
  * ```
+ *
+ * @param {String} key Key to index the cache
  */
-exports.retrieve = (k) => {
-	if (_debug) console.log(`kache.js // Retrieving value with key: ${k}`, exports.cache[k]);
-	return exports.cache[k];
+exports.retrieve = (key) => {
+	if (_debug) console.log(`kache.js // Retrieving value with key: ${key}`, exports.cache[key]);
+	return exports.cache[key];
 };
 
 /**
- * A function that basically just makes your code shorter and life easier.
+ * An function that basically just makes your code shorter and life easier.
  *
- * @param {Function} retrieverFunc The retriever function that returns a value. Can be async or not, I'll wait.
+ * @async Asynchronous function due the the nature that some retriever functions may be asynchronous
  * @param {String} key Key to store the retrieved stuff under
+ * @param {Function} retrieverFunc The retriever function that returns a value. Can be async or not, I'll wait.
+ * @param {any} args Arguments to be passed to the retriver function (if any)
  */
-exports.allInOne = async (retrieverFunc, key) => {
+exports.allInOne = async (key, retrieverFunc, ...args) => {
+	// The retriever function will be run when calling this function.
+	// Therefore, retrieverFunc will be any values returned.
+	key = key.toString();
 	if (exports.cache[key]) return exports.cache[key];
 	try {
-		let value = await retrieverFunc;
-		exports.cache[key] = value;
+		const value = await retrieverFunc(...args);
+		if (_debug) console.log("kache.js // Using retriever function");
+		console.log(key, value);
+		exports.store(key, value);
 		return value;
 	} catch (e) {
 		console.error(e);
@@ -83,4 +91,4 @@ exports.allInOne = async (retrieverFunc, key) => {
 // Shorthands
 exports.s = exports.store;
 exports.r = exports.retrieve;
-exports.a = exports.allInOne();
+exports.a = exports.allInOne;

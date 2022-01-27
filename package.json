@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Avoxel284/kache/issues"
   },
-  "homepage": "https://github.com/Avoxel284/kache#readme"
+  "homepage": "https://github.com/Avoxel284/kache#readme",
+  "dependencies": {
+    "dotenv": "^14.3.2"
+  }
 }
