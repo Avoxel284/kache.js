@@ -1,6 +1,6 @@
 {
   "name": "kache.js",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "A really simple module used to cache items for code optimization",
   "main": "index.js",
   "scripts": {
