@@ -79,7 +79,6 @@ exports.allInOne = async (key, retrieverFunc, ...args) => {
 	try {
 		const value = await retrieverFunc(...args);
 		if (_debug) console.log("kache.js // Using retriever function");
-		console.log(key, value);
 		exports.store(key, value);
 		return value;
 	} catch (e) {
